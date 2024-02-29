@@ -141,4 +141,94 @@ field element 33 - 44 is : FieldElement{order: 57, num: 46}
 check 46 + 44 over modulur 57 is 33
 field element 46 + 44 is FieldElement{order: 57, num: 33}
 ```
-we can do some simple arithmetic calculation, the result of (46+44) % 57 is indeed 33, which means the logic of our code is correct.
+we can do some simple arithmetic calculation, the result of (46+44) % 57 is indeed 33, which means the logic of our code is correct. Let's see how to add the operation of multiplie and power, there are arithmetic multiple and power over the modulur of order, the code is as following:
+```go
+func (f *FieldElement) checkOrder(other *FieldElement) {
+	if other.order != f.order {
+		panic("add need to do on field element with the same order")
+	}
+}
+
+func (f *FieldElement) Multiplie(other *FieldElement) *FieldElement {
+	f.checkOrder(other)
+	//multiplie over modulur of order
+	return NewFieldElement(f.order, (f.num*other.num)%f.order)
+}
+
+func (f *FieldElement) Power(power int64) *FieldElement {
+	return NewFieldElement(f.order, uint64(math.Pow(float64(f.num), float64(power)))%f.order)
+}
+```
+we run the newly add code for test, in main.go we add code like following:
+```go
+func main() {
+...
+    fmt.Printf("multiplie element 46 with itself is :%v\n", f46.Multiplie(f46))
+    fmt.Printf("element 46 with power to 2 is %v\n", f46.Power(2))
+}
+```
+The running result is:
+```go
+multiplie element 46 with itself is :FieldElement{order: 57, num: 7}
+element 46 with power to 2 is FieldElement{order: 57, num: 7}
+```
+we can see that element 46 mutiplie itself is equal to compute its power of 2. question time now, for finite field with order 19, randomly select one element  k from the set,
+compute {k . 0, k . 1, ... k . 18 } and what would you get?
+
+let's use code to solve the problem, first we need to add method for the field element that it can multiplie scalar nmber:
+```go
+func (f *FieldElement) ScalarMul(val uint64) *FieldElement {
+	return NewFieldElement(f.order, (f.num*val)%f.order)
+}
+```
+Now goto main.go, and use the followint code to solve the problem:
+```go
+package main
+
+import (
+	ecc "elliptic_curve"
+	"fmt"
+	"math/rand"
+)
+
+func SolveField19MultiplieSet() {
+	//randomly select a num from (1, 18)
+	min := 1
+	max := 18
+	k := rand.Intn(max-min) + min
+	fmt.Printf("randomly select k is : %d\n", k)
+	element := ecc.NewFieldElement(19, uint64(k))
+	for i := 0; i < 19; i++ {
+		fmt.Printf("element %d multiplie with %d is %v\n", k, i, element.ScalarMul(uint64(i)))
+	}
+
+}
+
+func main() {
+	SolveField19MultiplieSet()
+}
+
+```
+If you run the above code, you may get the following result:
+```go
+element 2 multiplie with 0 is FieldElement{order: 19, num: 0}
+element 2 multiplie with 1 is FieldElement{order: 19, num: 2}
+element 2 multiplie with 2 is FieldElement{order: 19, num: 4}
+element 2 multiplie with 3 is FieldElement{order: 19, num: 6}
+element 2 multiplie with 4 is FieldElement{order: 19, num: 8}
+element 2 multiplie with 5 is FieldElement{order: 19, num: 10}
+element 2 multiplie with 6 is FieldElement{order: 19, num: 12}
+element 2 multiplie with 7 is FieldElement{order: 19, num: 14}
+element 2 multiplie with 8 is FieldElement{order: 19, num: 16}
+element 2 multiplie with 9 is FieldElement{order: 19, num: 18}
+element 2 multiplie with 10 is FieldElement{order: 19, num: 1}
+element 2 multiplie with 11 is FieldElement{order: 19, num: 3}
+element 2 multiplie with 12 is FieldElement{order: 19, num: 5}
+element 2 multiplie with 13 is FieldElement{order: 19, num: 7}
+element 2 multiplie with 14 is FieldElement{order: 19, num: 9}
+element 2 multiplie with 15 is FieldElement{order: 19, num: 11}
+element 2 multiplie with 16 is FieldElement{order: 19, num: 13}
+element 2 multiplie with 17 is FieldElement{order: 19, num: 15}
+element 2 multiplie with 18 is FieldElement{order: 19, num: 17}
+```
+The result is the finit field with order 19!
