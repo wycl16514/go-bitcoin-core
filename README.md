@@ -13,17 +13,14 @@ import (
 )
 
 type FieldElement struct {
-	order int //field order
-	num   int //value of the given element in the field
+	order uint64 //field order
+	num   uint64 //value of the given element in the field
 }
 
-func NewFieldElement(order int, num int) FieldElement {
+func NewFieldElement(order uint64, num uint64) FieldElement {
 	/*
 		constructor for FieldElement, its the __init__ if you are from python
 	*/
-	if order <= 0 {
-		panic("order of a field should be possitive and prime")
-	}
 
 	if num >= order || num < 0 {
 		err := fmt.Sprintf("Num not in the range from 0 to %d", order)
@@ -53,49 +50,6 @@ func (f FieldElement) EqualTo(other FieldElement) bool {
 
 now we have the bare born for finite field element, let's add more method on it.we have two kind of operation on the field element, one is "+", it is arithmetic add with modulur, and "." it is arithmetic multiplie with modulur, let's see how we can do the addition:
 ```go
-package elliptic_curve
-
-import (
-	"fmt"
-)
-
-type FieldElement struct {
-	order int //field order
-	num   int //value of the given element in the field
-}
-
-func NewFieldElement(order int, num int) *FieldElement {
-	/*
-		constructor for FieldElement, its the __init__ if you are from python
-	*/
-	if order <= 0 {
-		panic("order of a field should be possitive and prime")
-	}
-
-	if num >= order || num < 0 {
-		err := fmt.Sprintf("Num not in the range from 0 to %d", order)
-		panic(err)
-	}
-
-	return &FieldElement{
-		order: order,
-		num:   num,
-	}
-}
-
-func (f *FieldElement) String() string {
-	//format the object to printable string
-	//its __repr__ if you are from python
-	return fmt.Sprintf("FieldElement{order: %d, num: %d}", f.order, f.num)
-}
-
-func (f *FieldElement) EqualTo(other *FieldElement) bool {
-	/*
-		two field element is equal if their order and value are equal
-	*/
-	return f.order == other.order && f.num == other.num
-}
-
 func (f *FieldElement) Add(other *FieldElement) *FieldElement {
 	if other.order != f.order {
 		panic("add need to do on field element with the same order")
