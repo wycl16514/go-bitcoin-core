@@ -351,3 +351,74 @@ for element: FieldElement{order: 31, num: 30}, its power of p - 1 is: FieldEleme
 you can see the set is all 1 regardless the field order, that means for any finit field with order p, for any element k in the field, we would have:
 k ^(p-1) % p == 1
 This is an important conclution, we will use it to drive our cryptograhpy algorithm in later videos
+
+The most difficult operation on field element is division, we have multiply operation, for two  elements 3, 7 from field with order 19, their multiply is (3 * 7) % 19 = 2, now given 
+two field element 2 and 7, how could we get 7? we difine a division operation that is the reverse operation of multiply, that is 2 / 7 = 3, this is quit unituitive. Here we need to 
+make sure the denominator is not 0
+
+Remember in the definition of finite field, if a is in the field, then there is another b in the field such that a . b = 1. for 3 . 7 = 2, (notice . means multiply over modulur the order), if we can find the b such that b . 7 = 1, then we will have 3 . 7 . b = 2 . b => 3 . (7 . b) = 2 .b => 3 = 2 . b, which means 2 / 7 is the result of 2 multiply b, and b. there
+for if we want to do the division a / b, we can find the multiply reverse of b, let's give it the name c, and use a multiply c with modulur the order.
+
+Now the question comes to how we can the multiply reverse of b? Remember our problem above? b ^ (p - 1) % p = 1, => b * b ^(p-2) % p = 1 => the multiply reverse of b is b ^ (p-2).
+
+If you are not assured why for any given element b in the field with order p and b^(p-1) % p = 1, all in all we just have a little piece of code the get the result, we need it to be 
+mathematical solid, then we have a proof for it, the conclusion  b^(p-1) % p = 1 is called Fermat's little theorem:
+
+for any field element k, (k!=0) with field order p, we have {1 , 2, 3 ..., p-1} <=>{k * 1 % p, ...., k* (p-1) %p} =>
+[1 * 2 * 3...* (p-1)] % p == (k*1) * (k*2) ... (k* (p-1)) % p = k^(p-1) * [1 * 2 * .. p-1] % p, cancel [1*2...*p-1] for both side we get 1 % p == k ^(p-1) % p => 1 == k^(p-1)%p
+
+now let's see how we use code to implement the division operation:
+```go
+func (f *FieldElement) Multiply(other *FieldElement) *FieldElement {
+	f.checkOrder(other)
+	//multiplie over modulur of order
+	var op big.Int
+	mul := op.Mul(f.num, other.num)
+	return NewFieldElement(f.order, op.Mod(mul, f.order))
+}
+```
+Because we have k ^(p-1) % p = 1, then when we compute field element k to the power of T, we can optmize by first get t = T % (p-1), then compute k^(t) % p, here is the code:
+```go
+func (f *FieldElement) Power(power *big.Int) *FieldElement {
+	/*
+		k ^ (p-1) % p = 1, we can compute t = power % (p-1)
+		and then k ^ power % p == k ^ t %p
+	*/
+	var op big.Int
+	t := op.Mod(power, op.Sub(f.order, big.NewInt(int64(1))))
+	powerRes := op.Exp(f.num, t, nil)
+	modRes := op.Mod(powerRes, f.order)
+	return NewFieldElement(f.order, modRes)
+}
+```
+Now we can check our code in main.go:
+```go
+package main
+
+import (
+	ecc "elliptic_curve"
+	"fmt"
+	"math/big"
+	"math/rand"
+)
+
+
+func main() {
+
+	f2 := ecc.NewFieldElement(big.NewInt(int64(19)), big.NewInt(int64(2)))
+	f7 := ecc.NewFieldElement(big.NewInt(int64(19)), big.NewInt(int64(7)))
+	fmt.Printf("field element 2 / 7 with order 19 is %v\n", f2.Divide(f7))
+
+	f46 := ecc.NewFieldElement(big.NewInt(57), big.NewInt(46))
+	fmt.Printf("field element 46 * 46 with order 57: %v\n", f46.Multiply(f46))
+	fmt.Printf("field element 46 ^ (58) is %v\n", f46.Power(big.NewInt(int64(58))))
+
+}
+```
+running the above code we get the following result:
+```go
+field element 2 / 7 with order 19 is FieldElement{order: 19, num: 3}
+field element 46 * 46 with order 57: FieldElement{order: 57, num: 7}
+field element 46 ^ (58) is FieldElement{order: 57, num: 7}
+```
+That's exactly what we want, that's all for the implementation of field element.
