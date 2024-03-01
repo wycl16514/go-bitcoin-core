@@ -96,7 +96,7 @@ func main() {
 	res := f44.Add(f33)
 	fmt.Printf("field element 44 add to field element 33 is : %v\n", res)
 	//-44 is the negate of field element 44, which is 57 - 44 = 13
-	fmt.Printf("negate of field element 44 is : %v\n", res.Negate())
+	fmt.Printf("negate of field element 44 is : %v\n", f44.Negate())
 }
 ```
 then run the command below:
