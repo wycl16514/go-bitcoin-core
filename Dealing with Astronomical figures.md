@@ -75,7 +75,7 @@ func (f *FieldElement) Subtract(other *FieldElement) *FieldElement {
 	return f.Add(other.Negate())
 }
 
-func (f *FieldElement) Multiplie(other *FieldElement) *FieldElement {
+func (f *FieldElement) Multiply(other *FieldElement) *FieldElement {
 	f.checkOrder(other)
 	//multiplie over modulur of order
 	var op big.Int
