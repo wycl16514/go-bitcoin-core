@@ -111,7 +111,7 @@ negate of field element 44 is : FieldElement{order: 57, num: 37}
 
 Let's sovle the Substract problem here, for field element a, b, we want to find the the field element c such that c = a - b, notice that a -b is the same as a + (-b), and (-b) is the negate of b, which means c is a plus the negate of b, let's put this into code :
 ```go
-func (f *FieldElement) Substract(other *FieldElement) *FieldElement {
+func (f *FieldElement) Subtract(other *FieldElement) *FieldElement {
 	//first find the negate of the other
 	//add this and the negate of the other
 	return f.Add(other.Negate())
@@ -122,7 +122,7 @@ Now let's add some code in main to run the Substract function:
 func main() {
     ....
 fmt.Printf("field element 44 - 33 is : %v\n", f44.Substract(f33))
-	fmt.Printf("field element 33 - 44 is : %v\n", f33.Substract(f44))
+	fmt.Printf("field element 33 - 44 is : %v\n", f33.Subtract(f44))
 
 	//it is easy to check (11+33)%57 == 44
 	//check (46 + 44) % 57 == 33
