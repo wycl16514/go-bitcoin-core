@@ -231,4 +231,4 @@ element 2 multiplie with 16 is FieldElement{order: 19, num: 13}
 element 2 multiplie with 17 is FieldElement{order: 19, num: 15}
 element 2 multiplie with 18 is FieldElement{order: 19, num: 17}
 ```
-The result is the finit field with order 19!
+
