@@ -173,4 +173,181 @@ element 2 multiplie with 16 is FieldElement{order: 19, num: 13}
 element 2 multiplie with 17 is FieldElement{order: 19, num: 15}
 element 2 multiplie with 18 is FieldElement{order: 19, num: 17}
 ```
-by checking the result, we can make sure the changes in FieldElement is not break our logic before.
+by checking the result, we can make sure the changes in FieldElement is not break our logic before. Now Let's give a thought to following problem:
+p = 7, 11, 17, 19, 31, what would the following set be:
+{1 ^(p-1), 2 ^ (p-1), ... (p-1)^(p-1)}
+Let's have code to solve it in main.go: 
+```go
+func ComputeFieldOrderPower() {
+	orders := []int{7, 11, 17, 31}
+	for _, p := range orders {
+		fmt.Printf("value of p is: %d\n", p)
+		for i := 1; i < p; i++ {
+			elm := ecc.NewFieldElement(big.NewInt(int64(p)), big.NewInt(int64(i)))
+			fmt.Printf("for element: %v, its power of p - 1 is: %v\n", elm,
+				elm.Power(big.NewInt(int64(p-1))))
+		}
+		fmt.Println("-------------------------------")
+	}
+}
+
+func main() {
+    ComputeFieldOrderPower()
+}
+```
+The result is following:
+```go
+value of p is: 7
+for element: FieldElement{order: 7, num: 1}, its power of p - 1 is: FieldElement{order: 7, num: 1}
+for element: FieldElement{order: 7, num: 2}, its power of p - 1 is: FieldElement{order: 7, num: 1}
+for element: FieldElement{order: 7, num: 3}, its power of p - 1 is: FieldElement{order: 7, num: 1}
+for element: FieldElement{order: 7, num: 4}, its power of p - 1 is: FieldElement{order: 7, num: 1}
+for element: FieldElement{order: 7, num: 5}, its power of p - 1 is: FieldElement{order: 7, num: 1}
+for element: FieldElement{order: 7, num: 6}, its power of p - 1 is: FieldElement{order: 7, num: 1}
+-------------------------------
+value of p is: 11
+for element: FieldElement{order: 11, num: 1}, its power of p - 1 is: FieldElement{order: 11, num: 1}
+for element: FieldElement{order: 11, num: 2}, its power of p - 1 is: FieldElement{order: 11, num: 1}
+for element: FieldElement{order: 11, num: 3}, its power of p - 1 is: FieldElement{order: 11, num: 1}
+for element: FieldElement{order: 11, num: 4}, its power of p - 1 is: FieldElement{order: 11, num: 1}
+for element: FieldElement{order: 11, num: 5}, its power of p - 1 is: FieldElement{order: 11, num: 1}
+for element: FieldElement{order: 11, num: 6}, its power of p - 1 is: FieldElement{order: 11, num: 1}
+for element: FieldElement{order: 11, num: 7}, its power of p - 1 is: FieldElement{order: 11, num: 1}
+for element: FieldElement{order: 11, num: 8}, its power of p - 1 is: FieldElement{order: 11, num: 1}
+for element: FieldElement{order: 11, num: 9}, its power of p - 1 is: FieldElement{order: 11, num: 1}
+for element: FieldElement{order: 11, num: 10}, its power of p - 1 is: FieldElement{order: 11, num: 1}
+-------------------------------
+value of p is: 17
+for element: FieldElement{order: 17, num: 1}, its power of p - 1 is: FieldElement{order: 17, num: 1}
+for element: FieldElement{order: 17, num: 2}, its power of p - 1 is: FieldElement{order: 17, num: 1}
+for element: FieldElement{order: 17, num: 3}, its power of p - 1 is: FieldElement{order: 17, num: 1}
+for element: FieldElement{order: 17, num: 4}, its power of p - 1 is: FieldElement{order: 17, num: 1}
+for element: FieldElement{order: 17, num: 5}, its power of p - 1 is: FieldElement{order: 17, num: 1}
+for element: FieldElement{order: 17, num: 6}, its power of p - 1 is: FieldElement{order: 17, num: 1}
+for element: FieldElement{order: 17, num: 7}, its power of p - 1 is: FieldElement{order: 17, num: 1}
+for element: FieldElement{order: 17, num: 8}, its power of p - 1 is: FieldElement{order: 17, num: 1}
+for element: FieldElement{order: 17, num: 9}, its power of p - 1 is: FieldElement{order: 17, num: 1}
+for element: FieldElement{order: 17, num: 10}, its power of p - 1 is: FieldElement{order: 17, num: 1}
+for element: FieldElement{order: 17, num: 11}, its power of p - 1 is: FieldElement{order: 17, num: 1}
+for element: FieldElement{order: 17, num: 12}, its power of p - 1 is: FieldElement{order: 17, num: 1}
+for element: FieldElement{order: 17, num: 13}, its power of p - 1 is: FieldElement{order: 17, num: 1}
+for element: FieldElement{order: 17, num: 14}, its power of p - 1 is: FieldElement{order: 17, num: 1}
+for element: FieldElement{order: 17, num: 15}, its power of p - 1 is: FieldElement{order: 17, num: 1}
+for element: FieldElement{order: 17, num: 16}, its power of p - 1 is: FieldElement{order: 17, num: 1}
+-------------------------------
+value of p is: 31
+for element: FieldElement{order: 31, num: 1}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+for element: FieldElement{order: 31, num: 2}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+for element: FieldElement{order: 31, num: 3}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+for element: FieldElement{order: 31, num: 4}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+for element: FieldElement{order: 31, num: 5}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+for element: FieldElement{order: 31, num: 6}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+for element: FieldElement{order: 31, num: 7}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+for element: FieldElement{order: 31, num: 8}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+for element: FieldElement{order: 31, num: 9}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+for element: FieldElement{order: 31, num: 10}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+for element: FieldElement{order: 31, num: 11}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+for element: FieldElement{order: 31, num: 12}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+for element: FieldElement{order: 31, num: 13}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+for element: FieldElement{order: 31, num: 14}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+for element: FieldElement{order: 31, num: 15}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+for element: FieldElement{order: 31, num: 16}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+for element: FieldElement{order: 31, num: 17}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+for element: FieldElement{order: 31, num: 18}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+for element: FieldElement{order: 31, num: 19}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+for element: FieldElement{order: 31, num: 20}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+my@MACdeMacBook-Air bitcoin % go run main.go
+value of p is: 7
+for element: FieldElement{order: 7, num: 1}, its power of p - 1 is: FieldElement{order: 7, num: 1}
+for element: FieldElement{order: 7, num: 2}, its power of p - 1 is: FieldElement{order: 7, num: 1}
+for element: FieldElement{order: 7, num: 3}, its power of p - 1 is: FieldElement{order: 7, num: 1}
+for element: FieldElement{order: 7, num: 4}, its power of p - 1 is: FieldElement{order: 7, num: 1}
+for element: FieldElement{order: 7, num: 5}, its power of p - 1 is: FieldElement{order: 7, num: 1}
+for element: FieldElement{order: 7, num: 6}, its power of p - 1 is: FieldElement{order: 7, num: 1}
+-------------------------------
+value of p is: 11
+for element: FieldElement{order: 11, num: 1}, its power of p - 1 is: FieldElement{order: 11, num: 1}
+for element: FieldElement{order: 11, num: 2}, its power of p - 1 is: FieldElement{order: 11, num: 1}
+for element: FieldElement{order: 11, num: 3}, its power of p - 1 is: FieldElement{order: 11, num: 1}
+for element: FieldElement{order: 11, num: 4}, its power of p - 1 is: FieldElement{order: 11, num: 1}
+for element: FieldElement{order: 11, num: 5}, its power of p - 1 is: FieldElement{order: 11, num: 1}
+for element: FieldElement{order: 11, num: 6}, its power of p - 1 is: FieldElement{order: 11, num: 1}
+for element: FieldElement{order: 11, num: 7}, its power of p - 1 is: FieldElement{order: 11, num: 1}
+for element: FieldElement{order: 11, num: 8}, its power of p - 1 is: FieldElement{order: 11, num: 1}
+for element: FieldElement{order: 11, num: 9}, its power of p - 1 is: FieldElement{order: 11, num: 1}
+for element: FieldElement{order: 11, num: 10}, its power of p - 1 is: FieldElement{order: 11, num: 1}
+-------------------------------
+value of p is: 17
+for element: FieldElement{order: 17, num: 1}, its power of p - 1 is: FieldElement{order: 17, num: 1}
+for element: FieldElement{order: 17, num: 2}, its power of p - 1 is: FieldElement{order: 17, num: 1}
+for element: FieldElement{order: 17, num: 3}, its power of p - 1 is: FieldElement{order: 17, num: 1}
+for element: FieldElement{order: 17, num: 4}, its power of p - 1 is: FieldElement{order: 17, num: 1}
+for element: FieldElement{order: 17, num: 5}, its power of p - 1 is: FieldElement{order: 17, num: 1}
+for element: FieldElement{order: 17, num: 6}, its power of p - 1 is: FieldElement{order: 17, num: 1}
+for element: FieldElement{order: 17, num: 7}, its power of p - 1 is: FieldElement{order: 17, num: 1}
+for element: FieldElement{order: 17, num: 8}, its power of p - 1 is: FieldElement{order: 17, num: 1}
+for element: FieldElement{order: 17, num: 9}, its power of p - 1 is: FieldElement{order: 17, num: 1}
+for element: FieldElement{order: 17, num: 10}, its power of p - 1 is: FieldElement{order: 17, num: 1}
+for element: FieldElement{order: 17, num: 11}, its power of p - 1 is: FieldElement{order: 17, num: 1}
+for element: FieldElement{order: 17, num: 12}, its power of p - 1 is: FieldElement{order: 17, num: 1}
+for element: FieldElement{order: 17, num: 13}, its power of p - 1 is: FieldElement{order: 17, num: 1}
+for element: FieldElement{order: 17, num: 14}, its power of p - 1 is: FieldElement{order: 17, num: 1}
+for element: FieldElement{order: 17, num: 15}, its power of p - 1 is: FieldElement{order: 17, num: 1}
+for element: FieldElement{order: 17, num: 16}, its power of p - 1 is: FieldElement{order: 17, num: 1}
+-------------------------------
+value of p is: 19
+for element: FieldElement{order: 19, num: 1}, its power of p - 1 is: FieldElement{order: 19, num: 1}
+for element: FieldElement{order: 19, num: 2}, its power of p - 1 is: FieldElement{order: 19, num: 1}
+for element: FieldElement{order: 19, num: 3}, its power of p - 1 is: FieldElement{order: 19, num: 1}
+for element: FieldElement{order: 19, num: 4}, its power of p - 1 is: FieldElement{order: 19, num: 1}
+for element: FieldElement{order: 19, num: 5}, its power of p - 1 is: FieldElement{order: 19, num: 1}
+for element: FieldElement{order: 19, num: 6}, its power of p - 1 is: FieldElement{order: 19, num: 1}
+for element: FieldElement{order: 19, num: 7}, its power of p - 1 is: FieldElement{order: 19, num: 1}
+for element: FieldElement{order: 19, num: 8}, its power of p - 1 is: FieldElement{order: 19, num: 1}
+for element: FieldElement{order: 19, num: 9}, its power of p - 1 is: FieldElement{order: 19, num: 1}
+for element: FieldElement{order: 19, num: 10}, its power of p - 1 is: FieldElement{order: 19, num: 1}
+for element: FieldElement{order: 19, num: 11}, its power of p - 1 is: FieldElement{order: 19, num: 1}
+for element: FieldElement{order: 19, num: 12}, its power of p - 1 is: FieldElement{order: 19, num: 1}
+for element: FieldElement{order: 19, num: 13}, its power of p - 1 is: FieldElement{order: 19, num: 1}
+for element: FieldElement{order: 19, num: 14}, its power of p - 1 is: FieldElement{order: 19, num: 1}
+for element: FieldElement{order: 19, num: 15}, its power of p - 1 is: FieldElement{order: 19, num: 1}
+for element: FieldElement{order: 19, num: 16}, its power of p - 1 is: FieldElement{order: 19, num: 1}
+for element: FieldElement{order: 19, num: 17}, its power of p - 1 is: FieldElement{order: 19, num: 1}
+for element: FieldElement{order: 19, num: 18}, its power of p - 1 is: FieldElement{order: 19, num: 1}
+-------------------------------
+value of p is: 31
+for element: FieldElement{order: 31, num: 1}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+for element: FieldElement{order: 31, num: 2}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+for element: FieldElement{order: 31, num: 3}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+for element: FieldElement{order: 31, num: 4}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+for element: FieldElement{order: 31, num: 5}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+for element: FieldElement{order: 31, num: 6}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+for element: FieldElement{order: 31, num: 7}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+for element: FieldElement{order: 31, num: 8}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+for element: FieldElement{order: 31, num: 9}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+for element: FieldElement{order: 31, num: 10}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+for element: FieldElement{order: 31, num: 11}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+for element: FieldElement{order: 31, num: 12}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+for element: FieldElement{order: 31, num: 13}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+for element: FieldElement{order: 31, num: 14}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+for element: FieldElement{order: 31, num: 15}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+for element: FieldElement{order: 31, num: 16}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+for element: FieldElement{order: 31, num: 17}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+for element: FieldElement{order: 31, num: 18}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+for element: FieldElement{order: 31, num: 19}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+for element: FieldElement{order: 31, num: 20}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+for element: FieldElement{order: 31, num: 21}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+for element: FieldElement{order: 31, num: 22}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+for element: FieldElement{order: 31, num: 23}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+for element: FieldElement{order: 31, num: 24}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+for element: FieldElement{order: 31, num: 25}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+for element: FieldElement{order: 31, num: 26}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+for element: FieldElement{order: 31, num: 27}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+for element: FieldElement{order: 31, num: 28}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+for element: FieldElement{order: 31, num: 29}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+for element: FieldElement{order: 31, num: 30}, its power of p - 1 is: FieldElement{order: 31, num: 1}
+-------------------------------
+```
+you can see the set is all 1 regardless the field order, that means for any finit field with order p, for any element k in the field, we would have:
+k ^(p-1) % p == 1
+This is an important conclution, we will use it to drive our cryptograhpy algorithm in later videos
